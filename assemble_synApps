@@ -32,6 +32,12 @@ GetOptions ("config=s" => \$releasefile,
             "help" => \$HELP,
 			"check" => \$CHECK) or die("error");
 
+# setting environment variables expected by the build system
+$ENV{EPICS_BASE}=$EPICS_BASE;
+$ENV{EPICS_HOST_ARCH}=`sh $EPICS_BASE/startup/EpicsHostArch | tr -d [:space:]`;
+print STDERR "EPICS_BASE='$EPICS_BASE'\n";
+print STDERR "EPICS_HOST_ARCH='$ENV{EPICS_HOST_ARCH}'\n";
+
 if ($HELP)
 {
 	print "assemble_synapps:\n";

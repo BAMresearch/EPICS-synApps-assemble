@@ -747,6 +747,12 @@ say $RELEASE "-include \$(SUPPORT)/configure/RELEASE.local";
 say $RELEASE "-include \$(SUPPORT)/configure/RELEASE.\$(EPICS_HOST_ARCH).local";
 close($RELEASE);
 
+# BAM specific changes
+if (-d "motor-$modules{MOTOR}/modules/motorIms")
+{
+	add_line("BUILD_IOCS = YES", "motor-$modules{MOTOR}/modules/motorIms/configure/CONFIG_SITE.local");
+}
+
 system("make release"); # system() forwards output and errors of the command
 
 if (exists($modules{GALIL}))

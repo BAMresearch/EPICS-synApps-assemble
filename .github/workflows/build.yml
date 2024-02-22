@@ -43,6 +43,7 @@ jobs:
       - name: Build EPICS
         run: |
           pwd
-          cd epics/epics-base/base
+          cd epics/base
+          ls -la
           make distclean
           make

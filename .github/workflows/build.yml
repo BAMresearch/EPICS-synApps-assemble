@@ -20,8 +20,6 @@ jobs:
         os: ['ubuntu-latest']
     steps:
 
-      - name: test
-        run: pwd; ls -la
       - name: Check out epics
         uses: actions/checkout@v4
         with:
@@ -42,8 +40,12 @@ jobs:
 
       - name: Build EPICS
         run: |
-          pwd
           cd epics/base
-          ls -la
           make distclean
           make
+      - name: Build synApps
+        run: |
+          cd ..
+          pwd
+          echo "HOME: '$HOME'"
+          ./assemble_synApps/assemble_synApps -h

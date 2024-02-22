@@ -24,7 +24,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: epics-base/epics-base
-          ref: 7.0
+          ref: '7.0'
           submodules: recursive
           path: epics
 

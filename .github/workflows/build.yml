@@ -20,6 +20,8 @@ jobs:
         os: ['ubuntu-latest']
     steps:
 
+      - name: test
+        run: pwd; ls -la
       - name: Check out epics
         uses: actions/checkout@v4
         with:
@@ -31,7 +33,7 @@ jobs:
       - name: Check out assemble_synApps
         uses: actions/checkout@v4
         with:
-          past: epics/assemble_synApps
+          path: epics/assemble_synApps
 
       - name: Install required packages
         run: |

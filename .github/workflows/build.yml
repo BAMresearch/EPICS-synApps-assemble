@@ -1,0 +1,43 @@
+name: build
+
+# Controls when the action will run.
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    # convert this to a matrix if builds differ between platforms
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: ['ubuntu-latest']
+    steps:
+
+      - name: Check out epics
+        uses: actions/checkout@v4
+        with:
+          repository: epics-base/epics-base
+          ref: 7.0
+          submodules: recursive
+          path: epics
+
+      - name: Check out assemble_synApps
+        uses: actions/checkout@v4
+
+      - name: Install required packages
+        run: |
+          apt-get install -y git build-essential curl libusb-dev libusb-1.0-0-dev re2c x11proto-dev libx11-dev libxext-dev
+
+      - name: Build EPICS
+        run: |
+          pwd
+          cd epics/epics-base/base
+          make distclean
+          make

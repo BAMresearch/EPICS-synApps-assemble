@@ -61,9 +61,16 @@ jobs:
 
       - name: Build synApps
         run: |
-          ./assemble_synApps/assemble_synApps --base="$(pwd)/epics-base" --dir="$(pwd)/synapps"
+          ./assemble_synApps/assemble_synApps --base="$(pwd)/epics-base" --dir="$(pwd)/synapps" 2>&1 | tee assemble.log
           cd synapps/support
-          make
+          make 2>&1 | tee make.log
+
+      - name: Store logs as artifacts
+        if: success() || failure() # always store the logs
+        uses: actions/upload-artifact@v2
+        with:
+          name: build_logs
+          path: *.log
 
       - name: Store build results as artifacts
         uses: actions/upload-artifact@v2

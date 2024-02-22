@@ -61,4 +61,4 @@ jobs:
 
       - name: Build synApps
         run: |
-          ./assemble_synApps/assemble_synApps --base=epics-base --dir=synapps
+          ./assemble_synApps/assemble_synApps --base="$(pwd)/epics-base" --dir="$(pwd)/synapps"

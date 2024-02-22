@@ -70,7 +70,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: build_logs
-          path: "*.log"
+          path: |
+            assemble.log
+            make.log
 
       - name: Store build results as artifacts
         uses: actions/upload-artifact@v4

@@ -26,14 +26,16 @@ jobs:
           repository: epics-base/epics-base
           ref: '7.0'
           submodules: recursive
-          path: epics
+          path: epics/base
 
       - name: Check out assemble_synApps
         uses: actions/checkout@v4
+        with:
+          past: epics/assemble_synApps
 
       - name: Install required packages
         run: |
-          pwd; ls -la
+          pwd; ls -la; ls -la *
           sudo apt-get install -y git build-essential curl libusb-dev libusb-1.0-0-dev re2c x11proto-dev libx11-dev libxext-dev
 
       - name: Build EPICS

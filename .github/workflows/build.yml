@@ -33,6 +33,7 @@ jobs:
 
       - name: Install required packages
         run: |
+          pwd; ls -la
           sudo apt-get install -y git build-essential curl libusb-dev libusb-1.0-0-dev re2c x11proto-dev libx11-dev libxext-dev
 
       - name: Build EPICS

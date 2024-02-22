@@ -20,32 +20,45 @@ jobs:
         os: ['ubuntu-latest']
     steps:
 
+      - name: Install required packages
+        run: |
+          sudo apt-get install -y git build-essential curl libusb-dev libusb-1.0-0-dev re2c x11proto-dev libx11-dev libxext-dev
+
+      # get & build EPICS first
+      - name: Restore cached EPICS
+        id: cache-epics
+        uses: actions/cache/restore@v4
+        with:
+          path: epics-base
+          key: ${{ runner.os }}-epics-base
+
       - name: Check out epics
+        if: steps.cache-epics.outputs.cache-hit != 'true'
         uses: actions/checkout@v4
         with:
           repository: epics-base/epics-base
           ref: '7.0'
           submodules: recursive
-          path: epics/base
+          path: epics-base
+
+      - name: Build EPICS
+        if: steps.cache-epics.outputs.cache-hit != 'true'
+        run: |
+          cd epics-base
+          make distclean
+          make
+
+      - name: Cache EPICS
+        uses: actions/cache/save@v4
+        with:
+          path: epics-base
+          key: ${{ steps.cache-epics.outputs.cache-primary-key }}
 
       - name: Check out assemble_synApps
         uses: actions/checkout@v4
         with:
-          path: epics/assemble_synApps
+          path: assemble_synApps
 
-      - name: Install required packages
-        run: |
-          pwd; ls -la; ls -la *
-          sudo apt-get install -y git build-essential curl libusb-dev libusb-1.0-0-dev re2c x11proto-dev libx11-dev libxext-dev
-
-      - name: Build EPICS
-        run: |
-          cd epics/base
-          make distclean
-          make
       - name: Build synApps
         run: |
-          cd ..
-          pwd
-          echo "HOME: '$HOME'"
-          ./assemble_synApps/assemble_synApps -h
+          ./assemble_synApps/assemble_synApps --base=epics-base --dir=synapps

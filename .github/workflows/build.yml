@@ -66,7 +66,7 @@ jobs:
           make
 
       - name: Store build results as artifacts
-        uses: actions/upload-artifact
+        uses: actions/upload-artifact@v2
         with:
           name: synApps+epics
           path: |

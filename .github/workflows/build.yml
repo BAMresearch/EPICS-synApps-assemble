@@ -64,3 +64,12 @@ jobs:
           ./assemble_synApps/assemble_synApps --base="$(pwd)/epics-base" --dir="$(pwd)/synapps"
           cd synapps/support
           make
+
+      - name: Store build results as artifacts
+        uses: actions/upload-artifacts
+        with:
+          name: synApps+epics
+          path: |
+            assemble_synApps
+            epics-base
+            synapps

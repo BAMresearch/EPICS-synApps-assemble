@@ -63,7 +63,7 @@ jobs:
         run: |
           ./assemble_synApps/assemble_synApps --base="$(pwd)/epics-base" --dir="$(pwd)/synapps" 2>&1 | tee assemble.log
           cd synapps/support
-          make 2>&1 | tee make.log
+          make 2>&1 | tee ../../make.log
 
       - name: Store logs as artifacts
         if: success() || failure() # always store the logs
@@ -72,7 +72,7 @@ jobs:
           name: build_logs
           path: |
             assemble.log
-            synapps/support/make.log
+            make.log
 
       - name: Store build results as artifacts
         uses: actions/upload-artifact@v4

@@ -65,6 +65,12 @@ jobs:
           cd synapps/support
           make 2>&1 | tee ../../make.log
 
+      - name: Check Galil created files
+        run: |
+            cd synapps/support
+            echo Listing all files in Galil-* directory
+            find Galil-* -type f
+
       - name: Store logs as artifacts
         if: success() || failure() # always store the logs
         uses: actions/upload-artifact@v4

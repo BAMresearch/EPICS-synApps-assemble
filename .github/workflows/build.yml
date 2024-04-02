@@ -79,12 +79,3 @@ jobs:
           path: |
             assemble.log
             make.log
-
-      - name: Store build results as artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: synApps+epics
-          path: |
-            assemble_synApps
-            epics-base
-            synapps

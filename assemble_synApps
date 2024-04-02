@@ -66,7 +66,7 @@ if ($releasefile eq "default")
 	$modules{'DXPSITORO'} = 'R1-3';
 	$modules{'DEVIOCSTATS'} = '3.1.16';
 	$modules{'ETHERIP'} = 'ether_ip-3-3';
-	$modules{'GALIL'} = 'V3-6';
+	$modules{'GALIL'} = 'R3-6-85';
 	$modules{'IP'} = 'R2-22';
 	$modules{'IPAC'} = '2.16';
 	$modules{'IP330'} = 'R2-10';
@@ -256,7 +256,7 @@ $module_info{DXP}           = {group => "epics-modules",         repo => "dxp"};
 $module_info{DXPSITORO}     = {group => "epics-modules",         repo => "dxpSITORO"};
 $module_info{DEVIOCSTATS}   = {group => "epics-modules",         repo => "iocStats"};
 $module_info{ETHERIP}       = {group => "epics-modules",         repo => "ether_ip"};
-$module_info{GALIL}         = {group => "motorapp",              repo => "Galil-3-0"};
+$module_info{GALIL}         = {group => "motorapp",              repo => "Galil"};
 $module_info{IP}            = {group => "epics-modules",         repo => "ip"};
 $module_info{IPAC}          = {group => "epics-modules",         repo => "ipac"};
 $module_info{IP330}         = {group => "epics-modules",         repo => "ip330"};
@@ -514,32 +514,10 @@ if (exists($modules{GALIL}))
 	
 	$FILTER_TAG =~ s/V//g;
 	
-	chdir "Galil-3-0-$modules{GALIL}";
+	chdir "Galil-$modules{GALIL}";
 	
-	copy_recur("${FILTER_TAG}/.", "./");
-	rmtree("${FILTER_TAG}");
+	copy("./config/GALILRELEASE", "./configure/RELEASE.local");
 
-	system("mv config/* configure/");
-	rmtree("config");
-	copy("./configure/GALILRELEASE", "./configure/RELEASE.local");
-
-	add_line('-include $(TOP)/../RELEASE.local', "./configure/RELEASE");
-	add_line('-include $(TOP)/../RELEASE.$(EPICS_HOST_ARCH).local', "./configure/RELEASE");
-	add_line('-include $(TOP)/configure/RELEASE.local', "./configure/RELEASE");
-	add_line('CONFIG = $(EPICS_BASE)/configure', "./configure/CONFIG");
-	add_line('include $(TOP)/configure/RELEASE', "./configure/CONFIG");
-	add_line('include $(CONFIG)/CONFIG', "./configure/CONFIG");
-	add_line('include $(EPICS_BASE)/configure/RULES_TOP', "./configure/RULES_TOP");
-	add_line('include $(CONFIG)/RULES', "./configure/RULES");
-	
-	do_substitution("\QLIBRARY_IOC += GalilSupport\E", "LIBRARY_IOC_Linux \+= GalilSupport\nLIBRARY_IOC_WIN32 += GalilSupport", "GalilSup/src/Makefile");
-	do_substitution("PROD_IOC = GalilTest", "PROD_IOC_Linux = GalilTest\nPROD_IOC_WIN32 = GalilTest", "GalilTestApp/src/Makefile");
-	system("mkdir -p dbd && cp GalilSup/src/GalilSupport.dbd dbd/");
-	
-	if (exists($modules{SNCSEQ}))
-	{
-		do_substitution("asyn motor calc sscan autosave busy", "asyn motor calc sscan autosave busy seq pv", "GalilTestApp/src/Makefile");
-	}
 	
 	chdir "..";
 }
@@ -737,12 +715,7 @@ say $RELEASE "-include \$(SUPPORT)/configure/RELEASE.local";
 say $RELEASE "-include \$(SUPPORT)/configure/RELEASE.\$(EPICS_HOST_ARCH).local";
 close($RELEASE);
 
+# Make RELEASE files for support modules consistent
 system("make release"); # system() forwards output and errors of the command
-
-if (exists($modules{GALIL}))
-{
-	# copy updated RELEASE.local with correct paths to expected GALILRELEASE file
-	chdir "Galil-3-0-$modules{GALIL}/configure";
-	copy("RELEASE.local", "GALILRELEASE");
-	chdir "../..";
-}
+# Start the build
+system("make");

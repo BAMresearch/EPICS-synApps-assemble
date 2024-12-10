@@ -15,7 +15,7 @@ default values.
 
 Additional packages to install on Ubuntu 22.04:
 
-    apt install -y git build-essential curl libusb-dev libusb-1.0-0-dev re2c x11proto-dev libx11-dev libxext-dev
+    apt install -y git build-essential curl libusb-dev libusb-1.0-0-dev re2c x11proto-dev libx11-dev libxext-dev libntirpc-dev
 
 ## Example Setup on Linux
 

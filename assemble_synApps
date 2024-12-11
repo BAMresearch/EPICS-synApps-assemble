@@ -726,6 +726,10 @@ if (-d "motor-$modules{MOTOR}/modules/motorIms")
 {
 	add_line("BUILD_IOCS = YES", "motor-$modules{MOTOR}/modules/motorIms/configure/CONFIG_SITE.local");
 }
+if (-d "motor-$modules{MOTOR}/modules/motorNewport")
+{
+	add_line("BUILD_IOCS = YES", "motor-$modules{MOTOR}/modules/motorNewport/configure/CONFIG_SITE.local");
+}
 
 # Make RELEASE files for support modules consistent
 system("make release"); # system() forwards output and errors of the command
